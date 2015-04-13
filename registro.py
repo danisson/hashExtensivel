@@ -26,9 +26,9 @@ class Registro(object):
 			raise TypeError("Argumento invalido")
 	def __str__(self):
 		string = "["
-		for i in range(0,128):
-			string += format(self[i],'02x')
-			if i<127: string+=", "
+		for i in range(0,128,4):
+			string += str(bytes2int(self[i:i+4]))
+			if i<124: string+=", "
 		string+="]"
 		return string
 
@@ -40,3 +40,6 @@ def int2bytes(x):
 	vetor[2] = (x//65536)%256;
 	vetor[3] = (x//16777216)%256;
 	return array('B',vetor)
+
+def bytes2int(x):
+	return x[0] + 256*x[1] + 65536*x[2] + 16777216*x[3]
