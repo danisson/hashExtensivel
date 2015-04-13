@@ -26,7 +26,17 @@ class Registro(object):
 			raise TypeError("Argumento invalido")
 	def __str__(self):
 		string = "["
-		for x in self.vetor:
-			string += format(x,'02x')+", "
+		for i in range(0,128):
+			string += format(self[i],'02x')
+			if i<127: string+=", "
 		string+="]"
 		return string
+
+def int2bytes(x):
+	if x<0 or x>(2**32-1): raise TypeError("Argumento invalido")
+	vetor = [0,0,0,0]
+	vetor[0] = x%256;
+	vetor[1] = (x//256)%256;
+	vetor[2] = (x//65536)%256;
+	vetor[3] = (x//16777216)%256;
+	return array('B',vetor)
