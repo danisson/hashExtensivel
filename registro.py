@@ -4,8 +4,13 @@ class Registro(object):
 	"""Registro 128 bytes"""
 	def __init__(self):
 		super(Registro, self).__init__()
-		self.vetor = array('B',(0 for _ in range(128)))
+		self.vetor = bytearray(0 for _ in range(128))
 		self.dirty = False
+	def __init__(self,vetorbytes):
+		if isinstance(vetorbytes,bytearray):
+			self.vetor = vetorbytes
+		else:
+			raise TypeError("Argumento não é um bytearray") 
 	def __getitem__(self, key):
 		if isinstance(key,slice):
 			return self.vetor[key]
