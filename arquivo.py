@@ -20,4 +20,4 @@ class Arquivo(object):
 	def lerRegistro(self,offset):
 		self.arquivo.seek(offset)
 		result_leitura = bytearray(self.arquivo.read(128))
-		return Registro(result_leitura)		
+		self.registroatual = Registro(result_leitura)		
