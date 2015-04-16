@@ -2,15 +2,13 @@ from array import array
 
 class Registro(object):
 	"""Registro 128 bytes"""
-	def __init__(self):
+	def __init__(self,vetorbytes=None):
 		super(Registro, self).__init__()
-		self.vetor = bytearray(0 for _ in range(128))
-		self.dirty = False
-	def __init__(self,vetorbytes):
-		if isinstance(vetorbytes,bytearray):
-			self.vetor = vetorbytes
+		if vetorbytes is None:
+			self.vetor = bytearray(0 for _ in range(128))
 		else:
-			raise TypeError("Argumento não é um bytearray") 
+			self.vetor = vetorbytes
+		self.dirty = False
 	def __getitem__(self, key):
 		if isinstance(key,slice):
 			return self.vetor[key]
@@ -39,12 +37,12 @@ class Registro(object):
 
 def int2bytes(x):
 	if x<0 or x>(2**32-1): raise TypeError("Argumento invalido")
-	vetor = [0,0,0,0]
+	vetor = bytearray([0,0,0,0])
 	vetor[0] = x%256;
 	vetor[1] = (x//256)%256;
 	vetor[2] = (x//65536)%256;
 	vetor[3] = (x//16777216)%256;
-	return array('B',vetor)
+	return vetor
 
 def bytes2int(x):
 	return x[0] + 256*x[1] + 65536*x[2] + 16777216*x[3]
