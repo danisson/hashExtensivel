@@ -36,6 +36,7 @@ class Registro(object):
 		return string
 
 def int2bytes(x):
+	"""Consideramos o armazenamento little endian"""
 	if x<0 or x>(2**32-1): raise TypeError("Argumento invalido")
 	vetor = bytearray([0,0,0,0])
 	vetor[0] = x%256;
@@ -45,4 +46,5 @@ def int2bytes(x):
 	return vetor
 
 def bytes2int(x):
+	"""Consideramos o armazenamento como little endian"""
 	return x[0] + 256*x[1] + 65536*x[2] + 16777216*x[3]
