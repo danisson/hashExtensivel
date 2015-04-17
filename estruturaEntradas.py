@@ -55,6 +55,7 @@ class EstruturaEntradas(object):
 			par = self.lerEntrada(i)
 			if par and par[0] == chave:
 				self.enderecos[i] = 0
+				break
 				
 		self.atualizarEnderecos()
 
