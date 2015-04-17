@@ -10,7 +10,9 @@ class Diretorio(object):
 		if self.arquivos[0].lerRegistro(0) == 0:
 			self.profundidadeGlobal = 2;
 			self.arquivos[0].alocarRegistro()
-			for i in range(0,4): self.adicionarBucket(2)
+			for i in range(0,4):
+				self.adicionarBucket(2)
+				# print(i,self.pegarProfundidade(i))
 		else:
 			self.profundidadeGlobal = self.procurarGlobal()
 
@@ -20,6 +22,14 @@ class Diretorio(object):
 		if self.arquivos[0].lerRegistro(numeroRegistro) == 0:
 			raise Exception("Indice invalido")
 		return self.arquivos[0].registro[1][indice*4]
+
+	def pegarReferencia(self,indice):
+		numeroRegistro = indice // self.qtdPorRegistro
+		indice = indice % self.qtdPorRegistro
+		if self.arquivos[0].lerRegistro(numeroRegistro) == 0:
+			raise Exception("Indice invalido")
+		if self.pegarProfundidade(indice) != 0:
+			return bytes2int(self.arquivos[0].registro[1][indice*4+1:(indice+1)*4]+b'\0')
 
 	def procurarGlobal(self):
 		i = 0
@@ -52,4 +62,4 @@ class Diretorio(object):
 	def adicionarBucket(self,prof):
 		indice = self.arquivos[1].alocarRegistro()
 		self.arquivos[1].alocarRegistro()
-		self.adicionarReferencia(prof,indice)
+		return self.adicionarReferencia(prof,indice)
