@@ -42,7 +42,7 @@ def main():
 
 	try:
 		arquivoRID = open("ridsalvo.txt","w")
-		arquivoRID.write(ultimoRID)
+		arquivoRID.write(str(ultimoRID))
 		arquivoRID.close()
 	except Exception as e:
 		print("Não foi possível salvar o último RID!")
