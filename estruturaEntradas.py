@@ -7,6 +7,7 @@ class EstruturaEntradas(object):
 	TAMINT = 4
 	OFFSETDADOS = 2
 	TAMANHO = 128
+	NUMENTRADAS = 15
 	def __init__(self, registro):
 		"""Sejam entradas de dados de tamanho 8. Logo em um Registro de 
 		128 bytes podemos colocar 15 entradas de 8 bytes mais um vetor de 
@@ -22,7 +23,7 @@ class EstruturaEntradas(object):
 	def adicionarEntrada(self,entrada):
 		indicelivre = self.enderecos.find(0)
 		if indicelivre == -1: raise Exception("Registro cheio!")
-		if indicelivre == 15: raise Exception("Registro cheio!")
+		if indicelivre == self.NUMENTRADAS: raise Exception("Registro cheio!")
 		print (indicelivre)
 		posicaokey = self.OFFSETDADOS + indicelivre * 2 * self.TAMINT
 		posicaovalue = posicaokey + self.TAMINT
@@ -32,6 +33,8 @@ class EstruturaEntradas(object):
 		self.atualizarEnderecos()
 
 	def lerEntrada(self,indice):
+		if (indice < 0): raise IndexError("Índice fora do intervalo!")
+		if (indice >= self.NUMENTRADAS): raise IndexError("Índice fora do intervalo!")
 		if self.enderecos[indice] == 0:
 			return None
 		posicaokey = self.OFFSETDADOS + indice * 2 * self.TAMINT
@@ -41,11 +44,19 @@ class EstruturaEntradas(object):
 		return (chave,rid)
 
 	def buscarEntrada(self,chave):
-		for i in range(0,self.TAMANHO):
+		for i in range(0,self.NUMENTRADAS):
 			par = self.lerEntrada(i)
 			if par and par[0] == chave:
 				return par
 		return None
+
+	def removerEntrada(self,chave):
+		for i in range(0,self.NUMENTRADAS):
+			par = self.lerEntrada(i)
+			if par and par[0] == chave:
+				self.enderecos[i] = 0
+				
+		self.atualizarEnderecos()
 
 	def atualizarEnderecos(self):
 		self.registro[0:2] = bits2bytes2(self.enderecos)
