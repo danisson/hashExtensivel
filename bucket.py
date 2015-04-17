@@ -29,3 +29,9 @@ class Bucket(object):
 					raise e
 			else:
 				break
+
+	def removerPar(self,chave):
+		for registro in self.registros:
+			self.arquivo.lerRegistro(registro)
+			entrada = EstruturaEntradas(self.arquivo.registro[1])
+			entrada.removerEntrada(chave)
