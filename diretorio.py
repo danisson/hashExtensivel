@@ -4,6 +4,7 @@ from arquivo import *
 class Diretorio(object):
 	"""Representa um diretório e o Hash Extensivo"""
 	qtdPorRegistro = 128//4
+	tamEntrada = 4
 	def __init__(self, arquivo, arquivoBucket):
 		super(Diretorio, self).__init__()
 		self.arquivos = (arquivo,arquivoBucket)
@@ -71,9 +72,9 @@ class Diretorio(object):
 		tambinario = len(binario)
 		hashbinario = binario[tambinario-self.profundidadeGlobal:tambinario+1]
 		posicao = int(hashbinario,2)
-		offsetDir = posicao * self.qtdPorRegistro
-		offsetReg = self.arquivos[0].registro[1][offsetDir+1:offsetDir+self.qtdPorRegistro]
-		bucket = Bucket(self.arquivoBucket,offsetReg,offsetReg+128)
+		offsetDir = posicao * self.tamEntrada
+		offsetReg = self.arquivos[0].registro[1][offsetDir+1:offsetDir+self.tamEntrada]
+		bucket = Bucket(self.arquivos[1],offsetReg,offsetReg+128)
 		return bucket.buscarRID(chave)
 
 	def inserirEntrada(self,entrada):
@@ -84,9 +85,10 @@ class Diretorio(object):
 		tambinario = len(binario)
 		hashbinario = binario[tambinario-self.profundidadeGlobal:tambinario+1]
 		posicao = int(hashbinario,2)
-		offsetDir = posicao * self.qtdPorRegistro
-		offsetReg = bytes2int(self.arquivos[0].registro[1][offsetDir+1:offsetDir+self.qtdPorRegistro]+bytearray(1))
-		bucket = Bucket(self.arquivos[1],offsetReg,offsetReg+128)
+		offsetDir = posicao * self.tamEntrada
+		offsetReg = bytes2int(self.arquivos[0].registro[1][offsetDir+1:offsetDir+self.tamEntrada]+bytearray(1))
+		bucket = Bucket(self.arquivos[1],offsetReg,offsetReg+1)
+		print("O hash é "+str(hashbinario)+" a posição no diretorio é: "+str(posicao)+" o bucket vai de: "+str([offsetReg,offsetReg+1]))
 		try:
 			bucket.adicionarPar(entrada)
 		except Exception as e:
