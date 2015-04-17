@@ -63,3 +63,32 @@ class Diretorio(object):
 		indice = self.arquivos[1].alocarRegistro()
 		self.arquivos[1].alocarRegistro()
 		return self.adicionarReferencia(prof,indice)
+
+	def buscarEntrada(self,chave):
+		self.arquivos[0].lerRegistro(0)
+		binario = bin(chave)
+		binario = binario.replace("b","")
+		tambinario = len(binario)
+		hashbinario = binario[tambinario-self.profundidadeGlobal:tambinario+1]
+		posicao = int(hashbinario,2)
+		offsetDir = posicao * self.qtdPorRegistro
+		offsetReg = self.arquivos[0].registro[1][offsetDir+1:offsetDir+self.qtdPorRegistro]
+		bucket = Bucket(self.arquivoBucket,offsetReg,offsetReg+128)
+		return bucket.buscarRID(chave)
+
+	def inserirEntrada(self,entrada):
+		self.arquivos[0].lerRegistro(0)
+		chave = entrada[0]
+		binario = bin(chave)
+		binario = binario.replace("b","")
+		tambinario = len(binario)
+		hashbinario = binario[tambinario-self.profundidadeGlobal:tambinario+1]
+		posicao = int(hashbinario,2)
+		offsetDir = posicao * self.qtdPorRegistro
+		offsetReg = bytes2int(self.arquivos[0].registro[1][offsetDir+1:offsetDir+self.qtdPorRegistro]+bytearray(1))
+		bucket = Bucket(self.arquivos[1],offsetReg,offsetReg+128)
+		try:
+			bucket.adicionarPar(entrada)
+		except Exception as e:
+			#self.dividirBucket(offsetDir)
+			print("Precisa dividir o bucket!")
