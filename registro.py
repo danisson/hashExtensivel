@@ -13,7 +13,7 @@ class Registro(object):
 		if isinstance(key,slice):
 			return self.vetor[key]
 		elif isinstance(key, int):
-			if key > 128 or key < 0: raise Exception('Chave fora do vetor')
+			if key > 127 or key < 0: raise Exception('Chave fora do vetor')
 			return self.vetor[key]
 		else:
 			raise TypeError("Argumento invalido")
@@ -22,7 +22,7 @@ class Registro(object):
 			self.vetor[key] = value
 			self.dirty = True
 		elif isinstance(key, int):
-			if key > 128 or key < 0: raise Exception('Chave fora do vetor')
+			if key > 127 or key < 0: raise Exception('Chave fora do vetor')
 			self.vetor[key] = value
 			self.dirty = True
 		else:

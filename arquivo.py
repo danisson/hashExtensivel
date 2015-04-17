@@ -19,6 +19,7 @@ class Arquivo(object):
 		self.arquivo.write(novoreg.vetor)
 		self.arquivo.flush()
 		self.registro = (tamanhoarq,novoreg)
+		return tamanhoarq//128
 
 	def salvarRegistro(self):
 		if self.registro[1] is not None and self.registro[1].dirty:
@@ -31,6 +32,7 @@ class Arquivo(object):
 		self.arquivo.seek(offset*128)
 		result_leitura = bytearray(self.arquivo.read(128))
 		self.registro = (offset*128,Registro(result_leitura))
+		return len(result_leitura)
 
 	def __str__(self):
 		return "<Arquivo "+self.arquivo.name+">"
